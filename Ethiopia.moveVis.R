@@ -1,0 +1,90 @@
+##########################
+#MoveVis
+##########################
+setwd("~/Documents/GitHub/movement.animations/")
+rm(list = ls())
+
+#install and load packages
+library(moveVis)
+library(move)
+
+#load data
+d = read.csv("Pan-Africa Vulture Tracking.csv")
+unique(d$individual.local.identifier)
+d = d[d$individual.local.identifier!=5316, ]
+d = d[d$individual.local.identifier!="Fringilla", ]
+d = d[d$individual.local.identifier!="Johan", ]
+d = d[d$individual.local.identifier!="Lemba", ]
+d = d[d$individual.local.identifier!="Mubanga", ]
+d = d[d$individual.local.identifier!="Johan", ]
+d = d[d$individual.local.identifier!="Precision", ]
+d = d[d$individual.local.identifier!="Timbavati", ]
+d = d[d$individual.local.identifier!="Johan", ]
+d = d[d$individual.local.identifier!=5329, ]
+d = d[d$individual.local.identifier!=5309, ]
+d = d[d$individual.local.identifier!=5315, ]
+d = d[d$individual.local.identifier!=1946411, ]
+d = d[d$individual.local.identifier!=1380285, ]
+d = d[d$individual.local.identifier!="Lizzy", ]
+d = d[d$individual.local.identifier!=5317, ]
+d = d[d$individual.local.identifier!="KingTut", ]
+d = d[d$individual.local.identifier!="TomPetty", ]
+summary(d)
+
+#subset to 1 individual
+#d= subset(d, d$individual.local.identifier == "Stratos")
+
+# Re-store DateTime_GMT as POSIXt object
+d$timestamp <- as.POSIXct(d$timestamp, tz='GMT')
+class(d$timestamp)
+summary(d$timestamp)
+d = subset(d, timestamp >= as.POSIXct('2018-10-01 00:00:00') &
+             timestamp <= as.POSIXct('2019-08-25 00:00:00'))
+summary(d$timestamp)
+
+# use df2move to convert the data.frame into a moveStack
+dm = df2move(d, proj = "+proj=longlat +datum=WGS84",
+             x = 'location.long', y = 'location.lat', time = 'timestamp', 
+             track_id = 'individual.local.identifier')
+
+# align move_data to a uniform time scale
+move_data <- align_move(dm, res = 1, digit = 0, unit = "days")
+
+# create spatial frames 
+unique(d$individual.local.identifier)
+move_data
+get_maptypes()
+#extent = extent(32.5,48.5,2.5,15.5)
+colourpalette<-c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120')
+colourpalette
+frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
+                         #map_service = "mapbox", map_type = "hybrid", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
+                         map_service = "osm", map_type = "terrain",
+                         map_dir = "~/Documents/MapDirectory/",
+                         #ext = extent, 
+                         equidistant = T,
+                         path_size = 1, path_end = "round", path_join = "round", path_fade = F,
+                         path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
+                         tail_length = 5, tail_size = .5, tail_colour = "black", trace_show = T, trace_colour = "black", 
+                         path_legend = FALSE)
+length(frames)
+frames[[100]] # preview one of the frames
+
+#customoze frames
+?add_labels
+frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
+                     #title = "Ethiopia Vulture Tracking, February 2019",
+                     #subtitle = 
+#                       "HawkWatch International, in collaboration with 
+#Hawk Mountain Sanctuary & Max Planck Institute for Ornithology
+#Prepared by Evan R. Buechley, Package moveVis, maps via Mapbox" ) # add labels, e.g. axis labels
+#frames <- add_progress(frames) # add a progress bar
+#frames <- add_scalebar(frames, height = 0.02, distance = 500, x = 33, y = 3.5) # add a scale bar
+#frames <- add_northarrow(frames, x = 48, y = 3.5) # add a north arrow
+#frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
+frames[[100]]
+
+# animate frames
+suggest_formats()
+?animate_frames
+animate_frames(frames, out_file = "./Outputs/EthiopiaVults_MovementAnimation.gif", overwrite = TRUE)
