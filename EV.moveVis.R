@@ -5,7 +5,6 @@ setwd("~/Documents/GitHub/movement.animations/")
 rm(list = ls())
 
 #install and load packages
-install.packages("moveVis")
 library(moveVis)
 library(move)
 library(lubridate)
@@ -19,41 +18,51 @@ d$timestamp <- ymd_hms(d$timestamp, tz='GMT')
 class(d$timestamp)
 
 #
-unique(d$id)
+unique(d$species)
+ev = subset(d, species == "Neophron percnopterus")
 Logiya = subset(d, id == "Logiya")
+summary(ev)
+names(ev)
 
 # use df2move to convert the data.frame into a moveStack
-dm = df2move(Logiya, proj = "+proj=longlat +datum=WGS84",
+dm = df2move(ev, proj = "+proj=longlat +datum=WGS84",
              x = 'long', y = 'lat', time = 'timestamp', 
              track_id = 'id')
 
 # align move_data to a uniform time scale
-move_data <- align_move(dm, res = 4, digit = 0, unit = "days")
+#move_data <- align_move(dm, res = 1, digit = 0, unit = "days")
+move_data <-  align_move(dm, res = "mean")
 
 # create spatial frames 
 get_maptypes()
 #extent = extent(-18,52,0,49)
 #To use mapbox maps, you need to register for a free mapbox account and get a token key, which can be inserted below
-frames <- frames_spatial(move_data, path_colours = NA,
-                         #map_service = "mapbox", map_type = "watercolor", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
-                         map_service = "osm", map_type = "terrain",
-                         #map_service = "carto", map_type = "voyager",
-                         alpha = 1, map_res = 1,
-                         margin_factor = 1.2,
+frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
+                         #map_service = "osm", map_type = "no_labels",
+                         map_service = "mapbox", map_type = "satellite", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
+                         #map_service = "osm", map_type = "terrain",
                          map_dir = "~/Documents/MapDirectory/",
+                         #ext = extent, 
+                         equidistant = F,
+                         path_size = .8, path_end = "round", path_join = "round", path_fade = T, 
+                         #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
+                         path_colours = NA,
+                         tail_length = 50, tail_size = .1, tail_colour = "gray", trace_show = T, trace_colour = "gray", 
                          path_legend = FALSE)
 length(frames)
-frames[100] # preview one of the frames
+#frames[100] # preview one of the frames
 
 #customize frames
 #frames <- add_labels(frames, x = "Longitude", y = "Latitude", title = "Egyptian Vulture Migrations", 
 #                     subtitle = "2007-2018") 
-#frames <- add_progress(frames) # add a progress bar
 #frames <- add_scalebar(frames, height = 0.02, distance = 2000, x = -20, y = -1) # add a scale bar
 #frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
 frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
-frames[[400]]
+frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
+frames <- add_progress(frames, size = 2) # add a progress bar
+frames[[1800]]
 
 # animate frames
 suggest_formats()
-animate_frames(frames, out_file = "test.gif")
+animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation.mp4", overwrite = TRUE,
+               fps = 5, end_pause = 3, res = 220)
