@@ -31,9 +31,6 @@ d = d[d$individual.local.identifier!="KingTut", ]
 d = d[d$individual.local.identifier!="TomPetty", ]
 summary(d)
 
-#subset to 1 individual
-#d= subset(d, d$individual.local.identifier == "Stratos")
-
 # Re-store DateTime_GMT as POSIXt object
 d$timestamp <- as.POSIXct(d$timestamp, tz='GMT')
 class(d$timestamp)
@@ -42,16 +39,22 @@ d = subset(d, timestamp >= as.POSIXct('2018-10-01 00:00:00') &
              timestamp <= as.POSIXct('2019-08-25 00:00:00'))
 summary(d$timestamp)
 
+#subset to 1 individual
+hv = subset(d, d$individual.local.identifier == "Kemise")
+wbv = subset(d, d$individual.local.identifier == "JT")
+rv = subset(d, d$individual.local.identifier == "Stratos")
+lfv = subset(d, d$individual.local.identifier == "M.C.Chops")
+
 # use df2move to convert the data.frame into a moveStack
-dm = df2move(d, proj = "+proj=longlat +datum=WGS84",
+hv.m = df2move(hv, proj = "+proj=longlat +datum=WGS84",
              x = 'location.long', y = 'location.lat', time = 'timestamp', 
              track_id = 'individual.local.identifier')
 
 # align move_data to a uniform time scale
-move_data <- align_move(dm, res = 1, digit = 0, unit = "days")
+move_data <- align_move(hv.m, res = "mean")
 
 # create spatial frames 
-unique(d$individual.local.identifier)
+unique(hv$individual.local.identifier)
 move_data
 get_maptypes()
 #extent = extent(32.5,48.5,2.5,15.5)
@@ -59,12 +62,13 @@ colourpalette<-c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a
 colourpalette
 frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
                          #map_service = "mapbox", map_type = "hybrid", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
-                         map_service = "osm", map_type = "terrain",
+                         #map_service = "osm", map_type = "terrain",
                          map_dir = "~/Documents/MapDirectory/",
                          #ext = extent, 
                          equidistant = T,
                          path_size = 1, path_end = "round", path_join = "round", path_fade = F,
-                         path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
+                         #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
+                         path_colours = NA,
                          tail_length = 5, tail_size = .5, tail_colour = "black", trace_show = T, trace_colour = "black", 
                          path_legend = FALSE)
 length(frames)
