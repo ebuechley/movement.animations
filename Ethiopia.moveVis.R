@@ -49,7 +49,6 @@ lfv = subset(d, d$individual.local.identifier == "M.C.Chops")
 #########################################################################
 # hooded vulture
 #########################################################################
-
 # use df2move to convert the data.frame into a moveStack
 hv.m = df2move(hv, proj = "+proj=longlat +datum=WGS84",
              x = 'location.long', y = 'location.lat', time = 'timestamp', 
@@ -72,33 +71,30 @@ frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
                          map_dir = "~/Documents/MapDirectory/",
                          #ext = extent, 
                          equidistant = F,
-                         path_size = .8, path_end = "round", path_join = "round", path_fade = T, 
+                         path_size = 1, path_end = "round", path_join = "round", path_fade = T, 
                          #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
-                         path_colours = '#e41a1c',
-                         tail_length = 50, tail_size = .1, tail_colour = "white", trace_show = T, trace_colour = "white", 
+                         path_colours = NA,
+                         tail_length = 50, tail_size = .2, tail_colour = "brown3", trace_show = T, trace_colour = "brown3", 
                          path_legend = FALSE)
 length(frames)
-#frames[[1000]] # preview one of the frames
+#frames[100] # preview one of the frames
 
-#customoze frames
-?add_labels
+#customize frames
+#frames <- add_labels(frames, x = "Longitude", y = "Latitude", title = "Egyptian Vulture Migrations", 
+#                     subtitle = "2007-2018") 
+#frames <- add_scalebar(frames, height = 0.02, distance = 2000, x = -20, y = -1) # add a scale bar
+#frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
+frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
 frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
-                     #title = "Ethiopia Vulture Tracking, February 2019",
-                     #subtitle = 
-#                       "HawkWatch International, in collaboration with 
-#Hawk Mountain Sanctuary & Max Planck Institute for Ornithology
-#Prepared by Evan R. Buechley, Package moveVis, maps via Mapbox" ) # add labels, e.g. axis labels
 frames <- add_progress(frames, size = 2) # add a progress bar
-#frames <- add_scalebar(frames, height = 0.02, distance = 10) # add a scale bar
-#frames <- add_northarrow(frames, x = 48, y = 3.5) # add a north arrow
-#frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
-frames[[1000]]
+frames[[100]]
 
 # animate frames
 suggest_formats()
 ?animate_frames
+
 animate_frames(frames, out_file = "./Outputs/HoodedVulture_MovementAnimation.mp4", overwrite = TRUE,
-               fps = 5, end_pause = 3, res = 220)
+               fps = 10, end_pause = 3, res = 1000, width = xx, height = xx,)
 
 
 #########################################################################

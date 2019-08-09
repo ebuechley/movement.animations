@@ -30,7 +30,7 @@ dm = df2move(ev, proj = "+proj=longlat +datum=WGS84",
              track_id = 'id')
 
 # align move_data to a uniform time scale
-#move_data <- align_move(dm, res = 1, digit = 0, unit = "days")
+#move_data <- align_move(dm, res = 182, digit = 0, unit = "days")
 move_data <-  align_move(dm, res = "mean")
 
 # create spatial frames 
@@ -44,10 +44,10 @@ frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
                          map_dir = "~/Documents/MapDirectory/",
                          #ext = extent, 
                          equidistant = F,
-                         path_size = .8, path_end = "round", path_join = "round", path_fade = T, 
+                         path_size = 1, path_end = "round", path_join = "round", path_fade = T, 
                          #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
                          path_colours = NA,
-                         tail_length = 50, tail_size = .1, tail_colour = "gray", trace_show = T, trace_colour = "gray", 
+                         tail_length = 50, tail_size = .2, tail_colour = "brown3", trace_show = T, trace_colour = "brown3", 
                          path_legend = FALSE)
 length(frames)
 #frames[100] # preview one of the frames
@@ -62,7 +62,7 @@ frames <- add_labels(frames, x = "Longitude", y = "Latitude")
 frames <- add_progress(frames, size = 2) # add a progress bar
 frames[[1800]]
 
-# animate frames
+# animate frame
 suggest_formats()
-animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation.mp4", overwrite = TRUE,
-               fps = 5, end_pause = 3, res = 220)
+animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation3.mp4", overwrite = TRUE,
+               fps = 10, end_pause = 3, res = 1000, width = 7900, height = 5000,)
