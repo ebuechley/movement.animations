@@ -10,17 +10,22 @@ library(move)
 library(lubridate)
 
 #load data
-d = read.csv("ev.tv.filtered.csv")
+#d = read.csv("ev.tv.filtered.csv")
+d = read.csv("EV.migration.flexibility.csv")
+d = read.csv("EV.migration.flexibility.completmigrationsonly.csv")
 head(d)
 
 # Re-store DateTime_GMT as POSIXt object
-d$timestamp <- ymd_hms(d$timestamp, tz='GMT')
+#d$timestamp <- ymd_hms(d$date, tz='GMT')
+d$timestamp <- ymd_hms(d$DateTime, tz='GMT')
 class(d$timestamp)
+summary(d$timestamp)
 
 #
 unique(d$species)
-ev = subset(d, species == "Neophron percnopterus")
-Logiya = subset(d, id == "Logiya")
+#ev = subset(d, species == "Neophron percnopterus")
+#Logiya = subset(d, id == "Logiya")
+ev = d
 summary(ev)
 names(ev)
 
@@ -30,8 +35,8 @@ dm = df2move(ev, proj = "+proj=longlat +datum=WGS84",
              track_id = 'id')
 
 # align move_data to a uniform time scale
-#move_data <- align_move(dm, res = 182, digit = 0, unit = "days")
-move_data <-  align_move(dm, res = "mean")
+move_data <- align_move(dm, res = 3, digit = 0, unit = "days")
+#move_data <-  align_move(dm, res = "mean")
 
 # create spatial frames 
 get_maptypes()
@@ -60,9 +65,9 @@ length(frames)
 frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
 frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
 frames <- add_progress(frames, size = 2) # add a progress bar
-frames[[1800]]
+frames[[1300]]
 
 # animate frame
 suggest_formats()
-animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation3.mp4", overwrite = TRUE,
-               fps = 11, end_pause = 3, res = 1000, width = 7900, height = 5000,)
+animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation_MigrationFlexibility_completmigrationsonly.mp4", overwrite = TRUE,
+               fps = 10, end_pause = 3, res = 1000, width = 8000, height = 5000,)
