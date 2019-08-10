@@ -40,6 +40,7 @@ d = subset(d, timestamp >= as.POSIXct('2018-10-01 00:00:00') &
 summary(d$timestamp)
 
 #subset to 1 individual
+unique(d$individual.local.identifier)
 hv = subset(d, d$individual.local.identifier == "Kemise")
 wbv = subset(d, d$individual.local.identifier == "JT")
 rv = subset(d, d$individual.local.identifier == "Stratos")
@@ -82,12 +83,12 @@ length(frames)
 #customize frames
 #frames <- add_labels(frames, x = "Longitude", y = "Latitude", title = "Egyptian Vulture Migrations", 
 #                     subtitle = "2007-2018") 
-#frames <- add_scalebar(frames, height = 0.02, distance = 2000, x = -20, y = -1) # add a scale bar
+#frames <- add_scalebar(frames, height = 0.02, distance = 10, position = "bottomleft") # add a scale bar
 #frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
 frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
 frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
 frames <- add_progress(frames, size = 2) # add a progress bar
-frames[[100]]
+frames[[1000]]
 
 # animate frames
 suggest_formats()
@@ -100,7 +101,6 @@ animate_frames(frames, out_file = "./Outputs/HoodedVulture_MovementAnimation.mp4
 #########################################################################
 # ruppell's vulture
 #########################################################################
-
 # use df2move to convert the data.frame into a moveStack
 rv.m = df2move(rv, proj = "+proj=longlat +datum=WGS84",
                x = 'location.long', y = 'location.lat', time = 'timestamp', 
