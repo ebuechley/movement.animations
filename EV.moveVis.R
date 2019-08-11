@@ -70,4 +70,4 @@ frames[[1300]]
 # animate frame
 suggest_formats()
 animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation_MigrationFlexibility_completmigrationsonly.mp4", overwrite = TRUE,
-               fps = 10, end_pause = 3, res = 1000, width = 8000, height = 5000,)
+               fps = 15, end_pause = 5, res = 1000, width = 7500, height = 5000,)
