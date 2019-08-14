@@ -40,12 +40,12 @@ d = subset(d, timestamp >= as.POSIXct('2018-10-01 00:00:00') &
 summary(d$timestamp)
 
 #subset to 1 individual
-unique(d$individual.local.identifier)
-hv = subset(d, d$individual.local.identifier == "Kemise")
-wbv = subset(d, d$individual.local.identifier == "JT")
-rv = subset(d, d$individual.local.identifier == "Stratos")
-lfv = subset(d, d$individual.local.identifier == "M.C.Chops")
-
+head(d)
+unique(d$individual.taxon.canonical.name)
+hv = subset(d, d$individual.taxon.canonical.name == "Necrosyrtes monachus")
+wbv = subset(d, d$individual.taxon.canonical.name == "Gyps africanus")
+rv = subset(d, d$individual.taxon.canonical.name == "Gyps rueppellii")
+lfv = subset(d, d$individual.taxon.canonical.name == "Torgos tracheliotus")
 
 #########################################################################
 # hooded vulture
@@ -56,47 +56,38 @@ hv.m = df2move(hv, proj = "+proj=longlat +datum=WGS84",
              track_id = 'individual.local.identifier')
 
 # align move_data to a uniform time scale
-#move_data <- align_move(hv.m, res = "mean")
-move_data <- align_move(hv.m, res = 1, digit = 0, unit = "days")
+move_data <- align_move(hv.m, res = "mean")
+#move_data <- align_move(hv.m, res = 1, digit = 0, unit = "days")
 
 # create spatial frames 
-unique(hv$individual.local.identifier)
 move_data
 get_maptypes()
-#extent = extent(32.5,48.5,2.5,15.5)
-colourpalette<-c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120')
-colourpalette
 frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
                          #map_service = "osm", map_type = "no_labels",
-                         map_service = "mapbox", map_type = "satellite", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
-                         #map_service = "osm", map_type = "terrain",
+                         #map_service = "mapbox", map_type = "satellite", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
+                         map_service = "osm", map_type = "terrain",
                          map_dir = "~/Documents/MapDirectory/",
-                         #ext = extent, 
                          equidistant = F,
                          path_size = 1, path_end = "round", path_join = "round", path_fade = T, 
-                         #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
-                         path_colours = NA,
-                         tail_length = 50, tail_size = .2, tail_colour = "brown3", trace_show = T, trace_colour = "brown3", 
-                         path_legend = FALSE)
+                         path_colours = c('#e41a1c','#377eb8'),
+                         tail_length = 50, tail_size = .2, tail_colour = '#ff7f00', trace_show = F, trace_colour = '#ff7f00', 
+                         path_legend = F)
 length(frames)
-#frames[100] # preview one of the frames
 
 #customize frames
-#frames <- add_labels(frames, x = "Longitude", y = "Latitude", title = "Egyptian Vulture Migrations", 
-#                     subtitle = "2007-2018") 
+frames <- add_labels(frames, title = "Hooded Vulture Movements, Ethiopia", 
+                     caption = "Prepared by: Evan Buechley, Smithsonian Migratory Bird Center / HawkWatch International") 
 #frames <- add_scalebar(frames, height = 0.02, distance = 10, position = "bottomleft") # add a scale bar
 #frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
 frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
 frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
 frames <- add_progress(frames, size = 2) # add a progress bar
-frames[[200]]
+frames[[2000]]
 
 # animate frames
-suggest_formats()
-?animate_frames
-
 animate_frames(frames, out_file = "./Outputs/HoodedVulture_MovementAnimation.mp4", overwrite = TRUE,
-               fps = 10, end_pause = 3, res = 1000, width = 2000, height = 6000,)
+               fps = 10, end_pause = 3, res = 1000, width = 3000, height = 6000,)
+
 
 #########################################################################
 # white-backed vulture
@@ -107,45 +98,75 @@ wbv.m = df2move(wbv, proj = "+proj=longlat +datum=WGS84",
                track_id = 'individual.local.identifier')
 
 # align move_data to a uniform time scale
-#move_data <- align_move(hv.m, res = "mean")
-move_data <- align_move(wbv.m, res = 1, digit = 0, unit = "days")
+move_data <- align_move(wbv.m, res = "mean")
+#move_data <- align_move(hv.m, res = 1, digit = 0, unit = "days")
 
 # create spatial frames 
+move_data
 get_maptypes()
-#extent = extent(32.5,48.5,2.5,15.5)
-colourpalette<-c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120')
 frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
-                         map_service = "mapbox", map_type = "satellite", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
-                         #map_service = "osm", map_type = "terrain_bg",
-                         #map_service = "mapbox", map_type = "high_contrast", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
-                         #map_service = "mapbox", map_type = "emerald", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
+                         #map_service = "osm", map_type = "no_labels",
+                         #map_service = "mapbox", map_type = "satellite", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
+                         map_service = "osm", map_type = "terrain",
                          map_dir = "~/Documents/MapDirectory/",
-                         #ext = extent, 
                          equidistant = F,
                          path_size = 1, path_end = "round", path_join = "round", path_fade = T, 
-                         #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
-                         path_colours = '#984ea3',
-                         tail_length = 50, tail_size = .2, tail_colour = "white", trace_show = T, trace_colour = "white", 
-                         path_legend = FALSE)
+                         path_colours = NA,
+                         tail_length = 50, tail_size = .2, tail_colour = '#ff7f00', trace_show = F, trace_colour = '#ff7f00', 
+                         path_legend = F)
 length(frames)
-frames[[276]]
 
-#customoze frames
-?add_labels
+#customize frames
+frames <- add_labels(frames, title = "White-backed Vulture Movements, Ethiopia", 
+                     caption = "Prepared by: Evan Buechley, Smithsonian Migratory Bird Center / HawkWatch International") 
+#frames <- add_scalebar(frames, height = 0.02, distance = 10, position = "bottomleft") # add a scale bar
+#frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
+frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
 frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
-#title = "Ethiopia Vulture Tracking, February 2019",
-#subtitle = 
-#                       "HawkWatch International, in collaboration with 
-#Hawk Mountain Sanctuary & Max Planck Institute for Ornithology
-#Prepared by Evan R. Buechley, Package moveVis, maps via Mapbox" ) # add labels, e.g. axis labels
 frames <- add_progress(frames, size = 2) # add a progress bar
-#frames <- add_scalebar(frames, height = 0.02, distance = 10) # add a scale bar
-#frames <- add_northarrow(frames, x = 48, y = 3.5) # add a north arrow
-#frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
-frames[[276]]
+frames[[1000]]
 
 # animate frames
-suggest_formats()
-?animate_frames
 animate_frames(frames, out_file = "./Outputs/WhiteBackedVulture_MovementAnimation.mp4", overwrite = TRUE,
-               fps = 10, end_pause = 3, res = 1000)
+               fps = 10, end_pause = 3, res = 1000, width = 4000, height = 3000,)
+
+#########################################################################
+# ruppell's vulture
+#########################################################################
+# use df2move to convert the data.frame into a moveStack
+rv.m = df2move(rv, proj = "+proj=longlat +datum=WGS84",
+                x = 'location.long', y = 'location.lat', time = 'timestamp', 
+                track_id = 'individual.local.identifier')
+
+# align move_data to a uniform time scale
+move_data <- align_move(rv.m, res = "mean")
+#move_data <- align_move(hv.m, res = 1, digit = 0, unit = "days")
+
+# create spatial frames 
+move_data
+get_maptypes()
+frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
+                         #map_service = "osm", map_type = "no_labels",
+                         #map_service = "mapbox", map_type = "satellite", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
+                         map_service = "osm", map_type = "terrain",
+                         map_dir = "~/Documents/MapDirectory/",
+                         equidistant = F,
+                         path_size = 1, path_end = "round", path_join = "round", path_fade = T, 
+                         path_colours = NA,
+                         tail_length = 50, tail_size = .2, tail_colour = '#ff7f00', trace_show = F, trace_colour = '#ff7f00', 
+                         path_legend = F)
+length(frames)
+
+#customize frames
+frames <- add_labels(frames, title = "Ruppell's Vulture Movements, Ethiopia", 
+                     caption = "Prepared by: Evan Buechley, Smithsonian Migratory Bird Center / HawkWatch International") 
+#frames <- add_scalebar(frames, height = 0.02, distance = 10, position = "bottomleft") # add a scale bar
+#frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
+frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
+frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
+frames <- add_progress(frames, size = 2) # add a progress bar
+frames[[1500]]
+
+# animate frames
+animate_frames(frames, out_file = "./Outputs/RuppellsVulture_MovementAnimation.mp4", overwrite = TRUE,
+               fps = 10, end_pause = 3, res = 1000, width = 4000, height = 3000,)

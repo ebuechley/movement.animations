@@ -86,7 +86,7 @@ frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
                          path_size = 1, path_end = "round", path_join = "round", path_fade = T, 
                          #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
                          path_colours = NA,
-                         tail_length = 50, tail_size = .2, tail_colour = '#ff7f00', trace_show = T, trace_colour = '#ff7f00', 
+                         tail_length = 50, tail_size = .2, tail_colour = 'black', trace_show = T, trace_colour = 'black', 
                          path_legend = FALSE)
 length(frames)
 
