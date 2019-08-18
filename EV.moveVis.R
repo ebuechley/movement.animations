@@ -99,11 +99,9 @@ get_maptypes()
 #extent = extent(-18,52,0,49)
 #To use mapbox maps, you need to register for a free mapbox account and get a token key, which can be inserted below
 frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
-                         #map_service = "osm", map_type = "no_labels",
                          map_service = "mapbox", map_type = "satellite", map_token = "pk.eyJ1IjoiZWJ1ZWNobGV5IiwiYSI6ImNqc2xiZXYxejBxanA0NHBpOWhndnRzbDMifQ.JKpJkhVzqWqJbgjNZzLKnA",
                          #map_service = "osm", map_type = "terrain",
                          #map_service = "carto", map_type = "light_no_labels",
-                         #map_service = "osm", map_type = "terrain",
                          #map_dir = "~/Documents/MapDirectory/",
                          #ext = extent, 
                          equidistant = F,
@@ -112,14 +110,15 @@ frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
                          path_colours = NA,
                          tail_length = 5, tail_size = .1, tail_colour = '#ff7f00', trace_show = T, trace_colour = '#ff7f00', 
                          path_legend = FALSE)
-length(frames)
+#length(frames)
+#frames[[300]]
 
 #customize frames
 frames <- add_labels(frames, title = "Egyptian Vulture Migration", 
 caption = "W.L. Phipps, P. López-López, E.R. Buechley, S. Oppel, et al. (2019)
 Spatial and Temporal Variability in Migration of a Soaring Raptor Across Three Continents
 Frontiers in Ecology and Evolution") 
-frames <- add_scalebar(frames, height = 0.01, distance = 1500, x = -20, y = 0, label_margin = 2, colour = "whites") # add a scale bar
+frames <- add_scalebar(frames, height = 0.01, distance = 1500, x = -20, y = 0, label_margin = 2, colour = "white") # add a scale bar
 #frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
 #frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
 frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
