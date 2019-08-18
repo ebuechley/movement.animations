@@ -116,10 +116,10 @@ length(frames)
 
 #customize frames
 frames <- add_labels(frames, title = "Egyptian Vulture Migration", 
-caption = "W.L. Phipps, P. López-López, E. Buechley, S. Oppel, et al. (2019)
+caption = "W.L. Phipps, P. López-López, E.R. Buechley, S. Oppel, et al. (2019)
 Spatial and Temporal Variability in Migration of a Soaring Raptor Across Three Continents
 Frontiers in Ecology and Evolution") 
-frames <- add_scalebar(frames, height = 0.01, distance = 1500, x = -20, y = 0, label_margin = 2, colour = "black") # add a scale bar
+frames <- add_scalebar(frames, height = 0.01, distance = 1500, x = -20, y = 0, label_margin = 2, colour = "whites") # add a scale bar
 #frames <- add_northarrow(frames, x = 50, y = -1) # add a north arrow
 #frames <- add_timestamps(frames, move_data, type = "label") # add timestamps
 frames <- add_labels(frames, x = "Longitude", y = "Latitude") 
@@ -128,5 +128,5 @@ frames[[300]]
 
 # animate frame
 suggest_formats()
-animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation_MigrationFlexibility_Clean.mp4", overwrite = TRUE,
+animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation_MigrationFlexibility_Satellite.mp4", overwrite = TRUE,
                fps = 5, end_pause = 3, res = 1000, width = 10000, height = 8000,)
