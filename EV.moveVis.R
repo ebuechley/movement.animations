@@ -92,6 +92,7 @@ dm = df2move(ev, proj = "+proj=longlat +datum=WGS84",
 
 # align move_data to a uniform time scale
 move_data <- align_move(dm, res = 1, digit = 0, unit = "days")
+move_data@data$colour<-if_else(month(move_data@data$time)<7,'#e41a1c','#377eb8')
 #move_data <-  align_move(dm, res = "mean")
 
 # create spatial frames 
@@ -105,7 +106,7 @@ frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
                          #map_dir = "~/Documents/MapDirectory/",
                          #ext = extent, 
                          equidistant = F,
-                         path_size = 1, path_end = "round", path_join = "round", path_fade = T, 
+                         path_size = 2, path_end = "round", path_join = "round", path_fade = T, 
                          #path_colours = c('red', 'green', '#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999','#000120'),
                          path_colours = NA,
                          tail_length = 5, tail_size = .1, tail_colour = '#ff7f00', trace_show = T, trace_colour = '#ff7f00', 
@@ -114,7 +115,7 @@ frames <- frames_spatial(move_data, alpha = 1, map_res = 1, margin_factor = 1.2,
 #frames[[300]]
 
 #customize frames
-frames <- add_labels(frames, title = "Egyptian Vulture Migration", 
+frames <- add_labels(frames, title = month.abb[month(move_data@data$time)], 
 caption = "W.L. Phipps, P. López-López, E.R. Buechley, S. Oppel, et al. (2019)
 Spatial and Temporal Variability in Migration of a Soaring Raptor Across Three Continents
 Frontiers in Ecology and Evolution") 
