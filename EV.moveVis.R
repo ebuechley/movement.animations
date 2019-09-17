@@ -126,6 +126,14 @@ frames <- add_labels(frames, x = "Longitude", y = "Latitude")
 frames <- add_progress(frames, size = 2) # add a progress bar
 frames[[300]]
 
+### create monthly labels
+## the default function 'add_labels' is not temporally dynamic!
+monthlabel<-month.name[month(unique(move_data@data$time))]
+
+for (f in 1: length(frames)){
+  frames[[f]]$labels$title <- sprintf("Egyptian Vulture migration in %s",monthlabel[f])
+}
+
 # animate frame
 suggest_formats()
 animate_frames(frames, out_file = "./Outputs/EgyptianVulture_MovementAnimation_MigrationFlexibility_Satellite.mp4", overwrite = TRUE,
