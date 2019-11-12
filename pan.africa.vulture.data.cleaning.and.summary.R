@@ -432,7 +432,7 @@ for (i in unique(d$species.id)) {
     theme_bw() + geom_line() + labs(x = "date", y = "time between fixes (days)") 
   
   #GPS tracks
-  register_google(key = "AIzaSyA7S7kwtGt0Gb7So8qdGGrv83iSiyrimnU")
+  register_google(key = "XXXX")
   bbox1 <- make_bbox(lat = lat, lon = long,  data = subset(d, species.id ==  i))
   bbox_map = get_map(location = bbox1, maptype = "terrain", source = "google", scale = "auto")
 
@@ -466,7 +466,7 @@ for (i in unique(d$species.id)) {
 }
 
 #Ethiopia map plot
-register_google(key = "AIzaSyA7S7kwtGt0Gb7So8qdGGrv83iSiyrimnU")
+register_google(key = "XXXX")
 ETmap = get_map(location = c(40,9), maptype = "terrain", source = "google", zoom = 6)
 ggmap(ETmap)
 
